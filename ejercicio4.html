@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <style type="text/css">
+    
+    img{
+        width: 300px;
+        height: 200px;
+    }
+
+    #infocasa{
+        width: 500px;
+        height: auto;
+        text-align: center;
+        background-color: grey;
+        display:none;
+        border:red solid 2px;
+        margin-left: 350px;
+        padding: 20px 20px 20px 20px;
+    }
+
+    #cerrar{
+        color: red;
+    }
+
+    </style>
+    <script>
+        $(document).ready(function(){
+            $("img").click(function (){
+                let i=$(this).data("casa");
+                console.log(i);
+            
+            $.get("https://www.anapioficeandfire.com/api/houses/"+i+"", function(res){
+            console.log(res);
+            let gameofthrone='';
+            let info="<h4>Titles: </h4>";
+            gameofthrone+="<h2>"+res.name+"</h2>";
+            gameofthrone+="<h4>Words: "+res.words+"</h4>";
+            for(let i=0; i<res.titles.length; i++){
+                info+=""+res.titles[i]+", "
+            }
+                info+="</p><div id='cerrar'>[cerrar]</div>";
+            console.log(gameofthrone);
+            $('#house').html(gameofthrone);
+            $('#info').html(info);
+            $('#infocasa').css("display", "block");
+            $('#cerrar').click(function(){
+                $('#infocasa').css("display", "none");
+            })
+            
+            }, "json");
+            });
+            //}   
+           
+            //hacer click en ver todas
+            $("#vertoditas").click(function (){
+                
+                for(let identifica=1; identifica<1000; identifica++){
+                    $.get("https://www.anapioficeandfire.com/api/houses/"+identifica, 
+                    function(res){
+                        console.log(res.name);
+                        let vermas="<li>"+res.name+"</li>";
+                        $("#mascasas ul").append(vermas);
+                    }, "json");
+                }
+                
+            })
+    });
+    </script>
+</head>
+<body>
+    <img id="stark" src="stark.jpg" data-casa="362">
+    <img id="baratheon" src="baratheon.png" data-casa="16">
+    <img id="lannister" src="lannister.jpg" data-casa="229">
+    <img id="targaryen" src="targaryen.jpg" data-casa="378">
+    <div id="infocasa">    
+        <div id="house"></div>
+        <div id="info"></div>
+    </div>
+    <div id="vertodas"><h2 id="vertoditas">Ver Todas</h2>  
+        <div id="mascasas">
+            <ul></ul>
+        </div>
+    </div>
+    <ul id="clave"></ul>
+</body>
+</html>
